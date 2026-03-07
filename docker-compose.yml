@@ -1,0 +1,38 @@
+services:
+  app:
+    build: .
+    container_name: gradia-backend
+    ports:
+      - "${SERVER_PORT:-9800}:${SERVER_PORT:-9800}"
+    environment:
+      - SERVER_PORT=${SERVER_PORT:-9800}
+      - DB_URL=jdbc:postgresql://db:5432/gradia_db
+      - DB_USERNAME=${DB_USERNAME:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-password}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+    depends_on:
+      - db
+    networks:
+      - gradia-network
+
+  db:
+    image: postgres:16-alpine
+    container_name: gradia-db
+    environment:
+      - POSTGRES_DB=gradia_db
+      - POSTGRES_USER=${DB_USERNAME:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - gradia-network
+
+volumes:
+  postgres_data:
+
+networks:
+  gradia-network:
+    driver: bridge

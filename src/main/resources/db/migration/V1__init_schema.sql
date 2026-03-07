@@ -1,0 +1,3 @@
+-- Initial Schema Migration
+-- This file is intentionally left blank to initialize Flyway history.
+-- Add your CREATE TABLE statements here.
